@@ -33,9 +33,6 @@ export default async function QrPage() {
         className="mt-8 w-[min(360px,80vw)] rounded-3xl bg-card p-4 shadow-[0_12px_40px_rgba(0,0,0,0.06)]"
       />
       <p className="mt-4 max-w-md font-mono text-sm break-all">{url}</p>
-      <p className="mt-3 max-w-sm text-sm text-muted-foreground print:hidden">
-        This code contains the site address itself, so it keeps working after 15 days.
-      </p>
       <PrintButton />
     </main>
   );
