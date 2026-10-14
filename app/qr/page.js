@@ -9,11 +9,27 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
+function siteUrl(headerList) {
+  const configured = process.env.SITE_URL?.trim();
+  if (configured) return `${configured.replace(/\/$/, "")}/`;
+
+  const production = process.env.VERCEL_PROJECT_PRODUCTION_URL?.trim();
+  if (production) {
+    const host = production.replace(/^https?:\/\//, "").replace(/\/$/, "");
+    return `https://${host}/`;
+  }
+
+  const host = (headerList.get("x-forwarded-host") || headerList.get("host") || "localhost:3000")
+    .split(",")[0]
+    .trim();
+  const proto =
+    headerList.get("x-forwarded-proto")?.split(",")[0].trim() ||
+    (host.includes("localhost") ? "http" : "https");
+  return `${proto}://${host}/`;
+}
+
 export default async function QrPage() {
-  const headerList = await headers();
-  const host = headerList.get("x-forwarded-host") || headerList.get("host") || "localhost:3000";
-  const proto = headerList.get("x-forwarded-proto") || (host.includes("localhost") ? "http" : "https");
-  const url = `${proto}://${host}/`;
+  const url = siteUrl(await headers());
   const qr = await QRCode.toDataURL(url, {
     width: 720,
     margin: 1,
