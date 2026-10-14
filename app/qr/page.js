@@ -48,7 +48,6 @@ export default async function QrPage() {
         height={360}
         className="mt-8 w-[min(360px,80vw)] rounded-3xl bg-card p-4 shadow-[0_12px_40px_rgba(0,0,0,0.06)]"
       />
-      <p className="mt-4 max-w-md font-mono text-sm break-all">{url}</p>
       <PrintButton />
     </main>
   );
