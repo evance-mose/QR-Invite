@@ -88,12 +88,12 @@ export default function SignupForm() {
 
   return (
     <form
-      className="mt-10 text-left"
+      className="mt-8 text-left"
       onSubmit={form.handleSubmit(onSubmit)}
       noValidate
       aria-busy={status === "saving"}
     >
-      <FieldGroup className="gap-3">
+      <FieldGroup className="gap-3.5">
         <Controller
           name="name"
           control={form.control}
@@ -111,7 +111,7 @@ export default function SignupForm() {
                 placeholder="Enter your name"
                 aria-invalid={fieldState.invalid}
               />
-              {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+              {fieldState.invalid ? <FieldError className="text-center" errors={[fieldState.error]} /> : null}
             </Field>
           )}
         />
@@ -135,7 +135,7 @@ export default function SignupForm() {
                 placeholder="Enter your email"
                 aria-invalid={fieldState.invalid}
               />
-              {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+              {fieldState.invalid ? <FieldError className="text-center" errors={[fieldState.error]} /> : null}
             </Field>
           )}
         />
@@ -166,7 +166,7 @@ export default function SignupForm() {
                   aria-hidden="true"
                 />
               </div>
-              {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
+              {fieldState.invalid ? <FieldError className="text-center" errors={[fieldState.error]} /> : null}
             </Field>
           )}
         />
@@ -186,17 +186,17 @@ export default function SignupForm() {
             <Field
               orientation="horizontal"
               data-invalid={fieldState.invalid}
-              className="items-start justify-center py-1"
+              className="items-start px-0.5"
             >
               <Checkbox
                 id="agreement"
-                className="mt-0.5 size-4 rounded-none"
+                className="mt-0.5 size-4 rounded-none border-neutral-400"
                 checked={field.value}
                 onCheckedChange={(checked) => field.onChange(checked === true)}
                 aria-invalid={fieldState.invalid}
               />
               <div className="grid gap-1">
-                <FieldLabel htmlFor="agreement" className="font-normal text-neutral-500">
+                <FieldLabel htmlFor="agreement" className="text-sm leading-5 font-normal text-neutral-600">
                   I agree to join the mailing list.
                 </FieldLabel>
                 {fieldState.invalid ? <FieldError errors={[fieldState.error]} /> : null}
@@ -204,17 +204,17 @@ export default function SignupForm() {
             </Field>
           )}
         />
-        {serverError ? <FieldError>{serverError}</FieldError> : null}
+        {serverError ? <FieldError className="text-center">{serverError}</FieldError> : null}
         <Button
           type="submit"
-          className="h-12 w-full rounded-none bg-[#3a3a3a] text-sm font-semibold tracking-[0.18em] text-white uppercase shadow-none hover:bg-[#2a2a2a]"
+          className="mt-1 h-12 w-full rounded-none bg-[#2f2f2f] text-sm font-semibold tracking-[0.16em] text-white uppercase shadow-none hover:bg-black"
           disabled={status === "saving"}
         >
           {status === "saving" ? "Saving…" : "Subscribe"}
         </Button>
         <button
           type="button"
-          className="w-full py-3 text-center text-sm font-medium tracking-[0.14em] uppercase underline underline-offset-4"
+          className="w-full pt-4 text-center text-[13px] font-medium tracking-[0.16em] text-neutral-800 uppercase underline underline-offset-[5px]"
           onClick={() => setStatus("declined")}
         >
           No thanks
