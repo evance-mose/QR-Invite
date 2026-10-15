@@ -9,7 +9,7 @@ const sans = Plus_Jakarta_Sans({
 
 export const metadata = {
   title: "Mailing list",
-  description: "Add your name, email, and institution to our mailing list.",
+  description: "Add your title, name, email, institution, and province to our mailing list.",
 };
 
 export default function RootLayout({ children }) {

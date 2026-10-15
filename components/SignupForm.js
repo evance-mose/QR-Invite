@@ -9,10 +9,17 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { institutions } from "@/lib/institutions";
+import { provinces } from "@/lib/provinces";
+import { surnameStartsWithCapital } from "@/lib/validate";
 
 const schema = z.object({
-  name: z.string().trim().min(2, "Enter your name.").max(120, "Enter your name."),
+  title: z.string().trim().min(2, "Enter your title.").max(40, "Enter your title."),
+  name: z
+    .string()
+    .trim()
+    .min(2, "Enter your name and surname.")
+    .max(120, "Enter your name and surname.")
+    .refine(surnameStartsWithCapital, "Surname must start with a capital letter."),
   email: z
     .string()
     .trim()
@@ -20,7 +27,10 @@ const schema = z.object({
     .max(200, "Enter a valid email address."),
   institution: z
     .string()
-    .refine((value) => institutions.includes(value), "Choose your institution."),
+    .trim()
+    .min(2, "Enter your institution.")
+    .max(160, "Enter your institution."),
+  province: z.string().refine((value) => provinces.includes(value), "Choose your province."),
   agreement: z.boolean().refine((value) => value, "Tick the box to agree."),
   company_website: z.string().optional(),
 });
@@ -34,9 +44,11 @@ export default function SignupForm() {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
+      title: "",
       name: "",
       email: "",
       institution: "",
+      province: "",
       agreement: false,
       company_website: "",
     },
@@ -95,12 +107,33 @@ export default function SignupForm() {
     >
       <FieldGroup className="gap-3.5">
         <Controller
+          name="title"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid} className="gap-1.5">
+              <FieldLabel htmlFor="title" className="sr-only">
+                Title
+              </FieldLabel>
+              <Input
+                {...field}
+                id="title"
+                className={fieldClass}
+                autoComplete="honorific-prefix"
+                enterKeyHint="next"
+                placeholder="Title"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid ? <FieldError className="text-center" errors={[fieldState.error]} /> : null}
+            </Field>
+          )}
+        />
+        <Controller
           name="name"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid} className="gap-1.5">
               <FieldLabel htmlFor="name" className="sr-only">
-                Name
+                Name and surname
               </FieldLabel>
               <Input
                 {...field}
@@ -108,7 +141,7 @@ export default function SignupForm() {
                 className={fieldClass}
                 autoComplete="name"
                 enterKeyHint="next"
-                placeholder="Enter your name"
+                placeholder="Name and surname"
                 aria-invalid={fieldState.invalid}
               />
               {fieldState.invalid ? <FieldError className="text-center" errors={[fieldState.error]} /> : null}
@@ -132,7 +165,7 @@ export default function SignupForm() {
                 inputMode="email"
                 enterKeyHint="next"
                 spellCheck={false}
-                placeholder="Enter your email"
+                placeholder="Email address"
                 aria-invalid={fieldState.invalid}
               />
               {fieldState.invalid ? <FieldError className="text-center" errors={[fieldState.error]} /> : null}
@@ -147,15 +180,36 @@ export default function SignupForm() {
               <FieldLabel htmlFor="institution" className="sr-only">
                 Institution
               </FieldLabel>
+              <Input
+                {...field}
+                id="institution"
+                className={fieldClass}
+                autoComplete="organization"
+                enterKeyHint="next"
+                placeholder="Institution"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid ? <FieldError className="text-center" errors={[fieldState.error]} /> : null}
+            </Field>
+          )}
+        />
+        <Controller
+          name="province"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid} className="gap-1.5">
+              <FieldLabel htmlFor="province" className="sr-only">
+                Province
+              </FieldLabel>
               <div className="relative">
                 <select
                   {...field}
-                  id="institution"
-                  className={`${fieldClass} appearance-none pr-10 ${field.value ? "text-neutral-800" : "text-neutral-400"}`}
+                  id="province"
+                  className={`${fieldClass} appearance-none border pr-10 ${field.value ? "text-neutral-800" : "text-neutral-400"}`}
                   aria-invalid={fieldState.invalid}
                 >
-                  <option value="">Institution</option>
-                  {institutions.map((name) => (
+                  <option value="">Province</option>
+                  {provinces.map((name) => (
                     <option key={name} value={name}>
                       {name}
                     </option>

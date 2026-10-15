@@ -4,7 +4,8 @@
  * Deploy as a web app: Execute as Me, Who has access: Anyone.
  */
 
-var HEADERS = ["Submitted", "Name", "Email", "Institution"];
+var HEADERS = ["Submitted", "Title", "Name", "Email", "Institution", "Province"];
+var EMAIL_COLUMN = 4;
 
 function doPost(e) {
   return handlePost_(e);
@@ -29,7 +30,7 @@ function handlePost_(e) {
       var email = String(body.email || "").toLowerCase();
 
       if (lastRow > 1) {
-        var emails = sheet.getRange(2, 3, lastRow - 1, 1).getValues();
+        var emails = sheet.getRange(2, EMAIL_COLUMN, lastRow - 1, 1).getValues();
         for (var i = 0; i < emails.length; i++) {
           if (String(emails[i][0]).toLowerCase() === email) {
             return json_({ ok: true, duplicate: true });
@@ -37,7 +38,14 @@ function handlePost_(e) {
         }
       }
 
-      sheet.appendRow([body.submittedAt, body.name, email, body.institution]);
+      sheet.appendRow([
+        body.submittedAt,
+        body.title,
+        body.name,
+        email,
+        body.institution,
+        body.province,
+      ]);
       return json_({ ok: true, duplicate: false });
     } finally {
       lock.releaseLock();
@@ -59,12 +67,14 @@ function handleGet_(e) {
     var rows = [];
 
     for (var i = values.length - 1; i >= 1; i--) {
-      if (!values[i][2]) continue;
+      if (!values[i][3]) continue;
       rows.push({
         submittedAt: String(values[i][0] || ""),
-        name: String(values[i][1] || ""),
-        email: String(values[i][2] || ""),
-        institution: String(values[i][3] || ""),
+        title: String(values[i][1] || ""),
+        name: String(values[i][2] || ""),
+        email: String(values[i][3] || ""),
+        institution: String(values[i][4] || ""),
+        province: String(values[i][5] || ""),
       });
     }
 

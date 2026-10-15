@@ -13,11 +13,13 @@ function csvCell(value) {
 }
 
 function downloadCsv(rows) {
-  const header = ["Submitted", "Name", "Email", "Institution"];
+  const header = ["Submitted", "Title", "Name", "Email", "Institution", "Province"];
   const lines = [
     header.join(","),
     ...rows.map((row) =>
-      [row.submittedAt, row.name, row.email, row.institution].map(csvCell).join(",")
+      [row.submittedAt, row.title, row.name, row.email, row.institution, row.province]
+        .map(csvCell)
+        .join(",")
     ),
   ];
   const blob = new Blob([`\uFEFF${lines.join("\n")}`], { type: "text/csv;charset=utf-8" });
@@ -124,18 +126,22 @@ export default function AdminPanel() {
               <thead>
                 <tr className="border-b text-xs tracking-wide text-muted-foreground uppercase">
                   <th className="py-3 pr-4 font-medium">Submitted</th>
+                  <th className="py-3 pr-4 font-medium">Title</th>
                   <th className="py-3 pr-4 font-medium">Name</th>
                   <th className="py-3 pr-4 font-medium">Email</th>
-                  <th className="py-3 font-medium">Institution</th>
+                  <th className="py-3 pr-4 font-medium">Institution</th>
+                  <th className="py-3 font-medium">Province</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row) => (
                   <tr key={`${row.email}-${row.submittedAt}`} className="border-b last:border-0">
                     <td className="py-3 pr-4 align-top">{formatWhen(row.submittedAt)}</td>
+                    <td className="py-3 pr-4 align-top">{row.title}</td>
                     <td className="py-3 pr-4 align-top">{row.name}</td>
                     <td className="py-3 pr-4 align-top">{row.email}</td>
-                    <td className="py-3 align-top">{row.institution}</td>
+                    <td className="py-3 pr-4 align-top">{row.institution}</td>
+                    <td className="py-3 align-top">{row.province}</td>
                   </tr>
                 ))}
               </tbody>

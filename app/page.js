@@ -8,8 +8,7 @@ export default function HomePage() {
           Join our mailing list
         </h1>
         <p className="mx-auto mt-4 max-w-sm text-[15px] leading-6 text-neutral-500">
-          Subscribe with your name, email, and institution to receive updates
-          from this list.
+          Add your title, name and surname, email, institution, and province.
         </p>
         <SignupForm />
       </main>
