@@ -4,7 +4,7 @@
  * Deploy as a web app: Execute as Me, Who has access: Anyone.
  */
 
-var HEADERS = ["Submitted", "Title", "Name", "Email", "Institution", "Province"];
+var HEADERS = ["Created at", "Title", "Name", "Email", "Institution", "Province"];
 var EMAIL_COLUMN = 4;
 
 function doPost(e) {
@@ -38,14 +38,18 @@ function handlePost_(e) {
         }
       }
 
+      var createdAt = body.createdAt ? new Date(body.createdAt) : new Date();
+      if (isNaN(createdAt.getTime())) createdAt = new Date();
+
       sheet.appendRow([
-        body.submittedAt,
+        createdAt,
         body.title,
         body.name,
         email,
         body.institution,
         body.province,
       ]);
+      sheet.getRange(sheet.getLastRow(), 1).setNumberFormat("yyyy-mm-dd hh:mm");
       return json_({ ok: true, duplicate: false });
     } finally {
       lock.releaseLock();
@@ -69,7 +73,7 @@ function handleGet_(e) {
     for (var i = values.length - 1; i >= 1; i--) {
       if (!values[i][3]) continue;
       rows.push({
-        submittedAt: String(values[i][0] || ""),
+        createdAt: stamp_(values[i][0]),
         title: String(values[i][1] || ""),
         name: String(values[i][2] || ""),
         email: String(values[i][3] || ""),
@@ -89,6 +93,7 @@ function sheet_() {
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(HEADERS);
     sheet.setFrozenRows(1);
+    sheet.getRange("A:A").setNumberFormat("yyyy-mm-dd hh:mm");
     return sheet;
   }
 
@@ -103,7 +108,15 @@ function sheet_() {
     sheet.setFrozenRows(1);
   }
 
+  sheet.getRange("A:A").setNumberFormat("yyyy-mm-dd hh:mm");
   return sheet;
+}
+
+function stamp_(value) {
+  if (Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value.getTime())) {
+    return value.toISOString();
+  }
+  return String(value || "");
 }
 
 function authorised_(secret) {

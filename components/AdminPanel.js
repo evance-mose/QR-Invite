@@ -13,11 +13,11 @@ function csvCell(value) {
 }
 
 function downloadCsv(rows) {
-  const header = ["Submitted", "Title", "Name", "Email", "Institution", "Province"];
+  const header = ["Created at", "Title", "Name", "Email", "Institution", "Province"];
   const lines = [
     header.join(","),
     ...rows.map((row) =>
-      [row.submittedAt, row.title, row.name, row.email, row.institution, row.province]
+      [row.createdAt || row.submittedAt, row.title, row.name, row.email, row.institution, row.province]
         .map(csvCell)
         .join(",")
     ),
@@ -125,7 +125,7 @@ export default function AdminPanel() {
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b text-xs tracking-wide text-muted-foreground uppercase">
-                  <th className="py-3 pr-4 font-medium">Submitted</th>
+                  <th className="py-3 pr-4 font-medium">Created at</th>
                   <th className="py-3 pr-4 font-medium">Title</th>
                   <th className="py-3 pr-4 font-medium">Name</th>
                   <th className="py-3 pr-4 font-medium">Email</th>
@@ -135,8 +135,8 @@ export default function AdminPanel() {
               </thead>
               <tbody>
                 {rows.map((row) => (
-                  <tr key={`${row.email}-${row.submittedAt}`} className="border-b last:border-0">
-                    <td className="py-3 pr-4 align-top">{formatWhen(row.submittedAt)}</td>
+                  <tr key={`${row.email}-${row.createdAt || row.submittedAt}`} className="border-b last:border-0">
+                    <td className="py-3 pr-4 align-top">{formatWhen(row.createdAt || row.submittedAt)}</td>
                     <td className="py-3 pr-4 align-top">{row.title}</td>
                     <td className="py-3 pr-4 align-top">{row.name}</td>
                     <td className="py-3 pr-4 align-top">{row.email}</td>
