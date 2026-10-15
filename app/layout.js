@@ -8,8 +8,9 @@ const sans = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: "Mailing list",
-  description: "Add your title, name, email, institution, and province to our mailing list.",
+  title: "Seeds of Transformation mailing list",
+  description:
+    "Join our mailing list to receive updates and other information regarding the OMT-funded Seeds of Transformation national project.",
 };
 
 export default function RootLayout({ children }) {
