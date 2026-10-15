@@ -11,10 +11,6 @@ function doPost(e) {
   return handlePost_(e);
 }
 
-function doGet(e) {
-  return handleGet_(e);
-}
-
 function handlePost_(e) {
   try {
     var body = JSON.parse(e.postData.contents);
@@ -49,40 +45,10 @@ function handlePost_(e) {
         body.institution,
         body.province,
       ]);
-      sheet.getRange(sheet.getLastRow(), 1).setNumberFormat("yyyy-mm-dd hh:mm");
       return json_({ ok: true, duplicate: false });
     } finally {
       lock.releaseLock();
     }
-  } catch (error) {
-    return json_({ ok: false, error: String(error) });
-  }
-}
-
-function handleGet_(e) {
-  try {
-    var secret = e && e.parameter ? e.parameter.secret : "";
-    if (!authorised_(secret)) {
-      return json_({ ok: false, error: "Unauthorized" });
-    }
-
-    var sheet = sheet_();
-    var values = sheet.getDataRange().getValues();
-    var rows = [];
-
-    for (var i = values.length - 1; i >= 1; i--) {
-      if (!values[i][3]) continue;
-      rows.push({
-        createdAt: stamp_(values[i][0]),
-        title: String(values[i][1] || ""),
-        name: String(values[i][2] || ""),
-        email: String(values[i][3] || ""),
-        institution: String(values[i][4] || ""),
-        province: String(values[i][5] || ""),
-      });
-    }
-
-    return json_({ ok: true, rows: rows });
   } catch (error) {
     return json_({ ok: false, error: String(error) });
   }
@@ -110,13 +76,6 @@ function sheet_() {
 
   sheet.getRange("A:A").setNumberFormat("yyyy-mm-dd hh:mm");
   return sheet;
-}
-
-function stamp_(value) {
-  if (Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value.getTime())) {
-    return value.toISOString();
-  }
-  return String(value || "");
 }
 
 function authorised_(secret) {

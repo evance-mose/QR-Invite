@@ -26,7 +26,7 @@ export async function POST(request) {
   } catch (error) {
     const status = error.status || 500;
     return NextResponse.json(
-      { error: status === 503 ? error.message : "The signup could not be saved. Try again." },
+      { error: error.message || "The signup could not be saved. Try again." },
       { status }
     );
   }
