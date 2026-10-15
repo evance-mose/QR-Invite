@@ -5,7 +5,7 @@ import PrintButton from "@/components/PrintButton";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Mailing list QR code",
+  title: "Seeds of Transformation mailing list",
   robots: { index: false, follow: false },
 };
 
@@ -38,17 +38,21 @@ export default async function QrPage() {
   });
 
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center px-6 py-12 text-center">
-      <p className="text-sm font-medium text-muted-foreground">Scan to join</p>
-      <h1 className="mt-2 text-4xl font-semibold tracking-tight">Mailing list</h1>
-      <img
-        src={qr}
-        alt="QR code that opens the mailing list form"
-        width={360}
-        height={360}
-        className="mt-8 w-[min(360px,80vw)] rounded-3xl bg-card p-4 shadow-[0_12px_40px_rgba(0,0,0,0.06)]"
-      />
-      <PrintButton />
+    <main className="flex min-h-svh flex-col items-center px-6 py-12 text-center">
+      <div className="my-auto flex w-full max-w-md flex-col items-center">
+        <p className="text-lg font-semibold tracking-tight text-neutral-900">Scan to join</p>
+        <h1 className="mt-2 text-4xl leading-tight font-semibold tracking-tight text-balance">
+          Seeds of Transformation mailing list
+        </h1>
+        <img
+          src={qr}
+          alt="QR code that opens the Seeds of Transformation mailing list"
+          width={360}
+          height={360}
+          className="mt-8 w-[min(360px,80vw)] rounded-3xl bg-card p-4 shadow-[0_12px_40px_rgba(0,0,0,0.06)]"
+        />
+        <PrintButton />
+      </div>
     </main>
   );
 }
